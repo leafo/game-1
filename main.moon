@@ -14,7 +14,7 @@ require "player"
 
 class Game
   new: =>
-    @viewport = Viewport scale: 2
+    @viewport = Viewport scale: 4
     @player = Player 40, 40
 
   draw: =>
