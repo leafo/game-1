@@ -7,7 +7,7 @@ export reloader = require "lovekit.reloader"
 local dispatch
 fonts = {}
 
-export show_boxes = true
+export show_boxes = false
 p = (str, ...) -> g.print str\lower!, ...
 
 require "player"

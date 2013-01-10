@@ -26,27 +26,32 @@ class Player
     @dir = "right"
 
     body_right = {
-      "7,18,17,14"
       "39,18,17,14"
       "71,18,17,14"
       "102,18,17,14"
+      "7,18,17,14"
     }
 
     @body = StateAnim @dir, {
       right:  @sprite\seq body_right, 0.2
       left:   @sprite\seq body_right, 0.2, true
+      stand_right: @sprite\seq { "7,18,17,14" }, 0
+      stand_left: @sprite\seq { "7,18,17,14" }, 0, true
     }
 
     head_right = {
-      "1,64,30,22"
       "33,64,30,22"
       "65,64,30,22"
       "97,64,30,22"
+      "1,64,30,22"
     }
 
     @head = StateAnim @dir, {
       right:  @sprite\seq head_right, 0.2
       left:   @sprite\seq head_right, 0.2, true
+
+      stand_right:  @sprite\seq { "1,64,30,22" }, 0.2
+      stand_left:   @sprite\seq { "1,64,30,22" }, 0.2, true
     }
 
   set_state: (...) =>
@@ -64,12 +69,22 @@ class Player
 
   update: (dt, world) =>
     dir = movement_vector!
-    unless dir\is_zero!
+    is_moving = not dir\is_zero!
+
+    -- transition to standing
+    if (@is_moving and not is_moving) or @is_moving == nil
+      @set_state "stand_#{@dir}"
+      @is_moving = false
+
+    -- transition to moving
+    if not @is_moving and is_moving
+      print "transition to move"
       @dir = if dir.x < 0
         "left"
       else
         "right"
       @set_state @dir
+      @is_moving = true
 
     @box\move unpack dir * @speed * dt
     @body\update dt
