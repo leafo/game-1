@@ -11,18 +11,22 @@ export show_boxes = false
 p = (str, ...) -> g.print str\lower!, ...
 
 require "player"
+require "world"
 
 class Game
   new: =>
-    @viewport = Viewport scale: 4
+    @viewport = Viewport scale: 2
     @player = Player 40, 40
+    @world = World!
 
   draw: =>
     @viewport\apply!
+    @world\draw viewport
     @player\draw!
 
     g.setColor 255,255,255
     p "Hello World", 10, 10
+
     @viewport\pop!
 
   update: (dt) =>
