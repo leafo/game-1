@@ -1,5 +1,5 @@
 
-{graphics: g} = love
+{graphics: g, :keyboard} = love
 
 export *
 
@@ -7,6 +7,8 @@ class Player
   reloader.watch_class self if reloader
 
   speed: 80
+  jump: 3
+
   w: 6
   h: 14
 
@@ -70,6 +72,7 @@ class Player
 
     @box\draw {255,64,64, 64} if show_boxes
 
+
   update: (dt, world) =>
     dir = movement_vector!
     dir[2] = 0 -- hi
@@ -90,12 +93,17 @@ class Player
       @set_state @dir
       @is_moving = true
 
+    -- jumping
+    if @on_ground and keyboard.isDown "up"
+      @vel[2] -= @jump
+
     -- apply gravity
     @vel += world.gravity * dt
 
     dx, dy = unpack dir * @speed * dt
     cx, cy = @fit_move dx + @vel[1], dy + @vel[2], world
 
+    @on_ground = cy and @vel[2] >= 0
     if cy
       @vel[2] = 0
 

@@ -15,7 +15,7 @@ require "world"
 
 class Game
   new: =>
-    @viewport = Viewport scale: 2
+    @viewport = Viewport scale: 4
     @player = Player 40, 40
     @world = World!
 
@@ -25,7 +25,9 @@ class Game
     @player\draw!
 
     g.setColor 255,255,255
-    p "Hello World", 10, 10
+    p "#{@player.box.x}", 10, 10
+    p "#{@player.box.y}", 10, 20
+    p "#{@player.on_ground}", 10, 30
 
     @viewport\pop!
 
