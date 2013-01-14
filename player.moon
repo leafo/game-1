@@ -83,14 +83,16 @@ class Player
       @set_state "stand_#{@dir}"
       @is_moving = false
 
-    -- transition to moving
-    if not @is_moving and is_moving
-      print "transition to move"
+    if is_moving
       @dir = if dir.x < 0
         "left"
       else
         "right"
       @set_state @dir
+
+    -- transition to moving
+    if not @is_moving and is_moving
+      print "transition to move"
       @is_moving = true
 
     -- jumping
