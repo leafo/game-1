@@ -7,7 +7,7 @@ export reloader = require "lovekit.reloader"
 local dispatch
 fonts = {}
 
-export show_boxes = false
+export show_boxes = true
 p = (str, ...) -> g.print str\lower!, ...
 
 require "player"
@@ -31,7 +31,7 @@ class Game
 
   update: (dt) =>
     reloader\update! if reloader
-    @player\update dt
+    @player\update dt, @world
 
 load_font = (img, chars)->
   font_image = imgfy img

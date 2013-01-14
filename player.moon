@@ -20,10 +20,13 @@ class Player
 
   head_oy: 19
 
+  fit_move: Entity.fit_move
+
   new: (x,y) =>
     @box = Box x,y, @w,@h
     @sprite = Spriter "art/player.png", 16
     @dir = "right"
+    @vel = Vec2d 0,0
 
     body_right = {
       "39,18,17,14"
@@ -69,6 +72,7 @@ class Player
 
   update: (dt, world) =>
     dir = movement_vector!
+    dir[2] = 0 -- hi
     is_moving = not dir\is_zero!
 
     -- transition to standing
@@ -86,7 +90,19 @@ class Player
       @set_state @dir
       @is_moving = true
 
-    @box\move unpack dir * @speed * dt
+    -- apply gravity
+    @vel += world.gravity * dt
+
+    dx, dy = unpack dir * @speed * dt
+    cx, cy = @fit_move dx + @vel[1], dy + @vel[2], world
+
+    if cy
+      @vel[2] = 0
+
     @body\update dt
     @head\update dt
+
+    if world\collides @
+      print "colliding with world"
+
 
