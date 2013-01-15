@@ -29,7 +29,7 @@ class Game
     p "#{love.timer.getFPS()}", 1, 1
     p "#{@player.box.x}", 1, 10
     p "#{@player.box.y}", 1, 20
-    p "#{@player.on_ground}", 1, 30
+    p "#{@player.body.current_name}", 1, 30
 
     @viewport\pop!
 

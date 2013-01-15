@@ -35,9 +35,9 @@ class Player
     @gun = @shoot_seq!
 
     body_right = {
-      "39,18,17,14"
-      "71,18,17,14"
       "102,18,17,14"
+      "71,18,17,14"
+      "39,18,17,14"
       "7,18,17,14"
     }
 
@@ -45,8 +45,11 @@ class Player
       right:  @sprite\seq body_right, 0.2
       left:   @sprite\seq body_right, 0.2, true
 
-      stand_right: @sprite\seq { "7,18,17,14" }, 0
-      stand_left: @sprite\seq { "7,18,17,14" }, 0, true
+      stand_right: @sprite\seq { body_right[4] }, 0
+      stand_left: @sprite\seq { body_right[4] }, 0, true
+
+      jump_right: @sprite\seq { body_right[3] }, 0
+      jump_left: @sprite\seq { body_right[3] }, 0, true
     }
 
     head_right = {
@@ -88,8 +91,15 @@ class Player
 
   update_state: =>
     state = @dir
-    state = "stand_" .. state unless @is_moving
-    @body\set_state state
+    unless @is_moving
+      state = "stand_" .. state
+
+    body_state = if not @on_ground
+      "jump_" .. @dir
+    else
+      state
+
+    @body\set_state body_state
 
     state = "charging_" .. state if @charging
     @head\set_state state
@@ -152,7 +162,12 @@ class Player
     dx, dy = unpack dir * @speed * dt
     cx, cy = @fit_move dx + @vel[1], dy + @vel[2], world
 
-    @on_ground = cy and @vel[2] >= 0
+    on_ground = cy and @vel[2] >= 0
+
+    if on_ground != @on_ground
+      @on_ground = on_ground
+      @update_state!
+
     if cy
       @vel[2] = 0
 
