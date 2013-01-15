@@ -15,17 +15,21 @@ require "particles"
 require "shoot"
 require "player"
 require "enemy"
+require "dialog"
 require "world"
 
 class Game
   new: =>
     @viewport = Viewport scale: 2
-    @player = Player 150, 40
+    @player = Player 40, 40
     @world = World @player
+
+    -- @d = Dialog "What is going on right now?"
 
   draw: =>
     @viewport\apply!
-    @world\draw viewport
+    @world\draw @viewport
+    -- @d\draw @viewport
 
     g.setColor 255,255,255
     p "#{love.timer.getFPS()}", 1, 1
@@ -34,6 +38,7 @@ class Game
     p "#{@player.body.current_name}", 1, 30
 
     @viewport\pop!
+
 
   on_key: (key) =>
     if key == " "
