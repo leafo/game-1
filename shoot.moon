@@ -8,7 +8,7 @@ class Bullet extends Box
   lazy_value @, "sprite", => Spriter "art/bullet.png", 16
 
   alive: true
-  speed: 160
+  speed: 180
   w: 5, h: 4
 
   frames: {

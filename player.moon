@@ -44,6 +44,7 @@ class Player
     @body = StateAnim @dir, {
       right:  @sprite\seq body_right, 0.2
       left:   @sprite\seq body_right, 0.2, true
+
       stand_right: @sprite\seq { "7,18,17,14" }, 0
       stand_left: @sprite\seq { "7,18,17,14" }, 0, true
     }
@@ -55,24 +56,43 @@ class Player
       "1,64,30,22"
     }
 
+    charging_head_right = {
+      "33,96,30,22"
+      "65,96,30,22"
+      "97,96,30,22"
+       "1,96,30,22"
+    }
+
     @head = StateAnim @dir, {
       right:  @sprite\seq head_right, 0.2
       left:   @sprite\seq head_right, 0.2, true
 
-      stand_right:  @sprite\seq { "1,64,30,22" }, 0.2
-      stand_left:   @sprite\seq { "1,64,30,22" }, 0.2, true
+      stand_right:  @sprite\seq { head_right[4] }, 0.2
+      stand_left:   @sprite\seq { head_right[4] }, 0.2, true
+
+      charging_stand_right:  @sprite\seq { charging_head_right[4] }, 0.2
+      charging_stand_left:   @sprite\seq { charging_head_right[4] }, 0.2, true
+
+      charging_right:  @sprite\seq charging_head_right, 0.2
+      charging_left:   @sprite\seq charging_head_right, 0.2, true
     }
 
   shoot_seq: =>
     Sequence ->
+      @charging = false
+      @update_state!
       wait_for_key @shoot_key
       @shooting = true
       wait 0.5
       again!
 
-  set_state: (...) =>
-    @body\set_state ...
-    @head\set_state ...
+  update_state: =>
+    state = @dir
+    state = "stand_" .. state unless @is_moving
+    @body\set_state state
+
+    state = "charging_" .. state if @charging
+    @head\set_state state
 
   draw: =>
     {:body_ox, :body_oy} = @
@@ -100,15 +120,15 @@ class Player
 
     -- transition to standing
     if (@is_moving and not is_moving) or @is_moving == nil
-      @set_state "stand_#{@dir}"
       @is_moving = false
+      @update_state!
 
     if is_moving
       @dir = if dir.x < 0
         "left"
       else
         "right"
-      @set_state @dir
+      @update_state!
 
     -- transition to moving
     if not @is_moving and is_moving
@@ -122,6 +142,8 @@ class Player
     @gun\update dt if @gun
     if @shooting
       @shoot world
+      @charging = true
+      @update_state!
       @shooting = false
 
     -- apply gravity
