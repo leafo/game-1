@@ -33,7 +33,12 @@ class Bullet extends Box
   update: (dt, world) =>
     @anim\update dt
     @move unpack @vel * dt
-    not world\collides @
+    alive = not world\collides @
+
+    unless alive
+      world.particles\add BulletHit @x, @y
+
+    alive
 
   draw: =>
     ox, oy = unpack @offset[@vel[1] < 0 and "left" or "right"]

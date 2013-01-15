@@ -8,6 +8,7 @@ class World
   new: (@player) =>
     @map = load_map "levels/first.png"
     @entities = DrawList!
+    @particles = DrawList!
 
   draw: (viewport) =>
     @map\draw viewport
@@ -19,8 +20,11 @@ class World
     @entities\draw!
     g.setColor 255,255,255
 
+    @particles\draw!
+
   update: (dt) =>
     @entities\update dt, @
+    @particles\update dt, @
     @player\update dt, @
 
   collides: (thing) =>

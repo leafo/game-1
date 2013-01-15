@@ -10,6 +10,7 @@ fonts = {}
 export show_boxes = false
 p = (str, ...) -> g.print str\lower!, ...
 
+require "particles"
 require "shoot"
 require "player"
 require "world"
