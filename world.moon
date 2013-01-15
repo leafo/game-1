@@ -9,6 +9,10 @@ class World
     @map = load_map "levels/first.png"
     @entities = DrawList!
     @particles = DrawList!
+    @setup!
+
+  setup: =>
+    @entities\add Enemy 180, 50
 
   draw: (viewport) =>
     @map\draw viewport

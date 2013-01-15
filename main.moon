@@ -13,6 +13,7 @@ p = (str, ...) -> g.print str\lower!, ...
 require "particles"
 require "shoot"
 require "player"
+require "enemy"
 require "world"
 
 class Game
