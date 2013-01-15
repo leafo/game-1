@@ -6,6 +6,9 @@ export *
 class Player
   reloader.watch_class self if reloader
 
+  jump_key: "x"
+  shoot_key: "c"
+
   speed: 80
   jump: 3
 
@@ -29,6 +32,7 @@ class Player
     @sprite = Spriter "art/player.png", 16
     @dir = "right"
     @vel = Vec2d 0,0
+    @gun = @shoot_seq!
 
     body_right = {
       "39,18,17,14"
@@ -59,6 +63,13 @@ class Player
       stand_left:   @sprite\seq { "1,64,30,22" }, 0.2, true
     }
 
+  shoot_seq: =>
+    Sequence ->
+      wait_for_key @shoot_key
+      @shooting = true
+      wait 0.5
+      again!
+
   set_state: (...) =>
     @body\set_state ...
     @head\set_state ...
@@ -72,6 +83,15 @@ class Player
 
     @box\draw {255,64,64, 64} if show_boxes
 
+
+  shoot: (world, bullet_cls=Bullet) =>
+    dir = if @dir == "left"
+      Vec2d -bullet_cls.speed, 0
+    else
+      Vec2d bullet_cls.speed, 0
+
+    sx, sy = unpack bullet_cls.player_offset[@dir]
+    world.entities\add bullet_cls @box.x - sx, @box.y - sy, dir
 
   update: (dt, world) =>
     dir = movement_vector!
@@ -96,8 +116,13 @@ class Player
       @is_moving = true
 
     -- jumping
-    if @on_ground and keyboard.isDown "up"
+    if @on_ground and keyboard.isDown @jump_key
       @vel[2] -= @jump
+
+    @gun\update dt if @gun
+    if @shooting
+      @shoot world
+      @shooting = false
 
     -- apply gravity
     @vel += world.gravity * dt
@@ -111,8 +136,4 @@ class Player
 
     @body\update dt
     @head\update dt
-
-    if world\collides @
-      print "colliding with world"
-
 

@@ -5,14 +5,23 @@ export *
 
 class World
   gravity: Vec2d 0,10
-  new: =>
+  new: (@player) =>
     @map = load_map "levels/first.png"
+    @entities = DrawList!
 
   draw: (viewport) =>
     @map\draw viewport
     g.setColor 255,255,255
 
+    @player\draw!
+    g.setColor 255,255,255
+
+    @entities\draw!
+    g.setColor 255,255,255
+
   update: (dt) =>
+    @entities\update dt, @
+    @player\update dt, @
 
   collides: (thing) =>
     @map\collides thing

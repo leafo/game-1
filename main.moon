@@ -7,33 +7,34 @@ export reloader = require "lovekit.reloader"
 local dispatch
 fonts = {}
 
-export show_boxes = true
+export show_boxes = false
 p = (str, ...) -> g.print str\lower!, ...
 
+require "shoot"
 require "player"
 require "world"
 
 class Game
   new: =>
-    @viewport = Viewport scale: 4
-    @player = Player 40, 40
-    @world = World!
+    @viewport = Viewport scale: 2
+    @player = Player 150, 40
+    @world = World @player
 
   draw: =>
     @viewport\apply!
     @world\draw viewport
-    @player\draw!
 
     g.setColor 255,255,255
-    p "#{@player.box.x}", 10, 10
-    p "#{@player.box.y}", 10, 20
-    p "#{@player.on_ground}", 10, 30
+    p "#{love.timer.getFPS()}", 1, 1
+    p "#{@player.box.x}", 1, 10
+    p "#{@player.box.y}", 1, 20
+    p "#{@player.on_ground}", 1, 30
 
     @viewport\pop!
 
   update: (dt) =>
     reloader\update! if reloader
-    @player\update dt, @world
+    @world\update dt
 
 load_font = (img, chars)->
   font_image = imgfy img
