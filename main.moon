@@ -8,6 +8,7 @@ local dispatch
 fonts = {}
 
 export show_boxes = false
+export paused = false
 p = (str, ...) -> g.print str\lower!, ...
 
 require "particles"
@@ -34,7 +35,12 @@ class Game
 
     @viewport\pop!
 
+  on_key: (key) =>
+    if key == " "
+      paused = not paused
+
   update: (dt) =>
+    return if paused
     reloader\update! if reloader
     @world\update dt
 

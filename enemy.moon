@@ -33,7 +33,7 @@ class Enemy
       stand_right:  @sprite\seq @stand_left, 0.8, true
     }
     @anim\set_state "stand_left"
-  
+
   update: (dt, world) =>
     @anim\update dt
 
