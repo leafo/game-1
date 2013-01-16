@@ -27,18 +27,18 @@ class Game
     -- @d = Dialog "What is going on right now?"
 
   draw: =>
+    @viewport\center_on_pt @player.box.x, @player.box.y, @world.map\to_box!
+
     @viewport\apply!
     @world\draw @viewport
-    -- @d\draw @viewport
+    @viewport\pop!
 
+    g.scale 2,2
     g.setColor 255,255,255
     p "#{love.timer.getFPS()}", 1, 1
     p "#{@player.box.x}", 1, 10
     p "#{@player.box.y}", 1, 20
     p "#{@player.body.current_name}", 1, 30
-
-    @viewport\pop!
-
 
   on_key: (key) =>
     if key == " "
