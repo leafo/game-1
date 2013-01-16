@@ -25,6 +25,8 @@ class Enemy
   w: 15
   h: 21
 
+  is_enemy: true
+
   speed: 30
 
   fit_move: Entity.fit_move

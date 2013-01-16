@@ -9,6 +9,8 @@ class World
     @map = load_map "levels/first.png"
     @entities = DrawList!
     @particles = DrawList!
+    @collide = UniformGrid!
+
     @setup!
 
   setup: =>
@@ -30,6 +32,20 @@ class World
     @entities\update dt, @
     @particles\update dt, @
     @player\update dt, @
+
+    @collide\clear!
+    @collide\add @player.box, @player
+    for e in *@entities
+      continue unless e.alive
+      if e.box
+        @collide\add e.box, e
+      else
+        @collide\add e
+
+    for e in *@entities
+      continue unless e.is_enemy
+      for thing in *@collide\get_touching e.box
+        thing\on_hit e, @ if thing.on_hit
 
   collides: (thing) =>
     @map\collides thing

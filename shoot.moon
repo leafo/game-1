@@ -34,11 +34,15 @@ class Bullet extends Box
     @anim\update dt
     @move unpack @vel * dt
     alive = not world\collides @
-
-    unless alive
-      world.particles\add BulletHit @x, @y
-
+    @on_destroy world unless alive
     alive
+
+  on_hit: (thing, world) =>
+    @on_destroy world
+    @alive = false
+
+  on_destroy: (world) =>
+    world.particles\add BulletHit @x, @y
 
   draw: =>
     ox, oy = unpack @offset[@vel[1] < 0 and "left" or "right"]
@@ -46,4 +50,6 @@ class Bullet extends Box
     if show_boxes
       super {10,10,255, 100}
       g.setColor 255,255,255
+
+  __tostring: => "Bullet<#{Box.__tostring @}>"
 

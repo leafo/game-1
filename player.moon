@@ -174,3 +174,5 @@ class Player
     @body\update dt
     @head\update dt
 
+  __tostring: => "Player<#{@box}>"
+
