@@ -11,6 +11,8 @@ class Bullet extends Box
   speed: 180
   w: 5, h: 4
 
+  is_bullet: true
+
   frames: {
     "3,6,9,4"
     "19,6,9,4"

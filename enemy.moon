@@ -28,6 +28,7 @@ class Enemy
   is_enemy: true
 
   speed: 30
+  health: 100
 
   fit_move: Entity.fit_move
 
@@ -85,14 +86,33 @@ class Enemy
       @update_state!
       again!
 
+  take_hit: (thing, world) =>
+    if thing.is_bullet
+      thing\on_hit @, world
+
+      force = 100
+
+      dir = @box\vector_to thing
+      dx = if dir[1] > 0
+        -1
+      elseif dir[1] < 0
+        1
+      else
+        0
+
+      @vel[1] += dx * force * 2
+      @vel[2] -= force
 
   update: (dt, world) =>
     @anim\update dt
     @ai\update dt
 
+    if @hit_seq
+      @hit_seq\update dt
+
     -- apply gravity
-    @vel += world.gravity * dt
-    dx, dy = unpack @vel
+    @vel += world.gravity
+    dx, dy = unpack @vel * dt
 
     if @moving
       dx += @moving[1] * dt
@@ -101,6 +121,14 @@ class Enemy
     cx, cy = @fit_move dx, dy, world
 
     on_ground = cy and @vel[2] >= 0
+
+    -- apply friction
+    if @vel[1] != 0
+      if on_ground -- friction
+        @vel[1] = dampen @vel[1], dt * 500
+
+      if cx -- bounce
+        @vel[1] = -@vel[1] / 2
 
     if on_ground != @on_ground
       @on_ground = on_ground

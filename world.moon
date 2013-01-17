@@ -43,9 +43,9 @@ class World
         @collide\add e
 
     for e in *@entities
-      continue unless e.is_enemy
-      for thing in *@collide\get_touching e.box
-        thing\on_hit e, @ if thing.on_hit
+      if e.is_enemy
+        for thing in *@collide\get_touching e.box
+          e\take_hit thing, @
 
   collides: (thing) =>
     @map\collides thing
