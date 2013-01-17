@@ -21,6 +21,18 @@ class World
             @player.box.y = o.y
           when "enemy"
             @entities\add Enemy o.x, o.y
+      solid_tile: (tile) ->
+        if tile.tid == 64
+          tile.type = SlopeTopTile
+          tile[1] = 0
+          tile[2] = 8
+
+        if tile.tid == 65
+          tile.type = SlopeTopTile
+          tile[1] = 8
+          tile[2] = 16
+
+        tile
     }
 
   draw: (viewport) =>
