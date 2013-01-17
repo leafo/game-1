@@ -6,7 +6,6 @@ export *
 class World
   gravity: Vec2d 0,10
   new: (@player) =>
-    @map = load_map "levels/first.png"
     @entities = DrawList!
     @particles = DrawList!
     @collide = UniformGrid!
@@ -14,7 +13,15 @@ class World
     @setup!
 
   setup: =>
-    @entities\add Enemy 180, 50
+    @map = TileMap.from_tiled "levels.first", {
+      object: (o) ->
+        switch o.name
+          when "spawn"
+            @player.box.x = o.x
+            @player.box.y = o.y
+          when "enemy"
+            @entities\add Enemy o.x, o.y
+    }
 
   draw: (viewport) =>
     @map\draw viewport
@@ -49,16 +56,3 @@ class World
 
   collides: (thing) =>
     @map\collides thing
-
-load_map = (fname) ->
-  TileMap.from_image fname, {
-    cell_w: 16
-    cell_h: 16
-  }, {
-    "0,0,0": (x,y) ->
-      with Box x,y, 16,16
-        .layer = 0
-        .draw = =>
-          Box.draw @, {100,100,100}
-  }
-

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="30" height="15" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="../art/tiles.png" width="256" height="256"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="30" height="15">
+  <properties>
+   <property name="solid" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztjlEKgDAMQ7fpBaZeQPRj/3r/s63CAqNkWFDYzwoPZxqSOjdmzJge4ws9Or9274pANMvO6oeGu4Ph3dLwv7zsax5vqojli31STMJM/JF4Y3ULNN3HCKRnFTblO4SzkeFJBrtfw3o0l3AbM9Bnyf0T9GXrChLT
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="30" height="15">
+  <object name="spawn" x="225" y="49"/>
+  <object name="enemy" x="80" y="98"/>
+ </objectgroup>
+</map>

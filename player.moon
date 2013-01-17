@@ -10,7 +10,7 @@ class Player
   shoot_key: "c"
 
   speed: 80
-  jump: 3
+  jump: 3.4
 
   w: 6
   h: 14
